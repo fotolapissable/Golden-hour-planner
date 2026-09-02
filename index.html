@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Golden Hour — fotolapissable</title>
+<meta name="description" content="Alba, tramonto, ora dorata e ora blu per la fotografia. Etna e costa ionica, calcolati per la tua posizione.">
+<meta name="theme-color" content="#141210">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Golden Hour">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NN6FP74TCW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NN6FP74TCW');
+</script>
+<style>
+  :root{
+    --bg:#141210;
+    --bg-raised:#1c1916;
+    --line:#2c2822;
+    --amber:#C8813A;
+    --amber-light:#E0A56A;
+    --blue:#5B7A9D;
+    --blue-light:#8CA8C4;
+    --text:#F2EDE6;
+    --text-dim:#A79A88;
+    --text-faint:#6E6357;
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    padding-bottom:3rem;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:0 1.25rem;}
+
+  header{
+    padding:2.75rem 1.25rem 1.5rem;
+    text-align:left;
+  }
+  header .mark{
+    display:flex; align-items:center; gap:.6rem;
+    font-family:var(--serif); font-size:1.05rem; letter-spacing:.02em;
+    color:var(--text-dim); margin-bottom:1.6rem;
+  }
+  header .mark .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+  h1{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:2.15rem;
+    line-height:1.15;
+    margin:0 0 .35rem;
+    color:var(--text);
+  }
+  h1 em{font-style:italic; color:var(--amber-light);}
+  .sub{color:var(--text-dim); font-size:.95rem; max-width:32ch; line-height:1.5;}
+
+  .locbar{
+    display:flex; align-items:center; gap:.6rem;
+    margin:1.5rem 0 0;
+    padding:.8rem 1rem;
+    background:var(--bg-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    font-size:.88rem;
+    color:var(--text-dim);
+  }
+  .locbar button{
+    background:none;border:none;color:var(--amber-light);
+    font-size:.88rem; font-family:var(--sans); font-weight:600;
+    padding:0; cursor:pointer; margin-left:auto;
+  }
+  .locbar .lname{color:var(--text); font-weight:500;}
+
+  .datebar{
+    display:flex; align-items:center; justify-content:space-between;
+    margin:1.75rem 0 0;
+  }
+  .datebar .navbtn{
+    background:var(--bg-raised); border:1px solid var(--line); color:var(--text);
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; cursor:pointer;
+  }
+  .datebar .navbtn:active{background:var(--line);}
+  .datebar .curdate{
+    font-family:var(--serif); font-size:1.05rem; text-align:center;
+    text-transform:capitalize;
+  }
+  .datebar .curdate small{display:block; color:var(--text-faint); font-size:.72rem; font-family:var(--sans); letter-spacing:.05em; margin-top:.15rem;}
+
+  /* Timeline */
+  .timeline{
+    position:relative;
+    margin:2.25rem 0 1rem;
+    padding:1.75rem 0;
+  }
+  .timeline svg{width:100%; height:64px; display:block;}
+  .timeline-track{
+    position:relative; height:2px; background:var(--line); margin-top:-32px;
+  }
+  .now-marker{
+    position:absolute; top:-6px; width:2px; height:14px; background:var(--text);
+  }
+
+  .phases{margin-top:1.75rem; display:flex; flex-direction:column; gap:0;}
+  .phase{
+    display:flex; align-items:center; gap:.9rem;
+    padding:.85rem 0;
+    border-bottom:1px solid var(--line);
+  }
+  .phase:last-child{border-bottom:none;}
+  .phase .swatch{width:10px;height:10px;border-radius:3px; flex-shrink:0;}
+  .phase .label{flex:1; font-size:.92rem; color:var(--text);}
+  .phase .label small{display:block; color:var(--text-faint); font-size:.74rem; margin-top:.1rem;}
+  .phase .time{font-family:var(--serif); font-size:1.05rem; color:var(--text); font-variant-numeric:tabular-nums;}
+  .phase .time.dim{color:var(--text-dim);}
+
+  .sw-gold .swatch{background:var(--amber);}
+  .sw-blue .swatch{background:var(--blue);}
+  .sw-sun .swatch{background:var(--amber-light);}
+  .sw-neutral .swatch{background:var(--text-faint);}
+
+  .note{
+    margin-top:2rem;
+    padding:1rem 1.1rem;
+    background:var(--bg-raised);
+    border-left:2px solid var(--amber);
+    border-radius:0 10px 10px 0;
+    font-size:.85rem;
+    line-height:1.55;
+    color:var(--text-dim);
+  }
+  .note strong{color:var(--text);}
+
+  .presets{
+    display:flex; gap:.5rem; margin-top:1.5rem; flex-wrap:wrap;
+  }
+  .presets button{
+    background:var(--bg-raised); border:1px solid var(--line); color:var(--text-dim);
+    padding:.5rem .9rem; border-radius:999px; font-size:.8rem; cursor:pointer;
+    font-family:var(--sans);
+  }
+  .presets button.active{border-color:var(--amber); color:var(--amber-light);}
+
+  footer{
+    margin-top:2.5rem; padding-top:1.25rem; border-top:1px solid var(--line);
+    font-size:.75rem; color:var(--text-faint); display:flex; justify-content:space-between;
+  }
+
+  .install-toast{
+    position:fixed; left:1rem; right:1rem; bottom:1rem;
+    background:var(--bg-raised); border:1px solid var(--amber);
+    border-radius:12px; padding:.9rem 1rem;
+    display:flex; align-items:center; gap:.8rem;
+    max-width:608px; margin:0 auto;
+    transform:translateY(120%); transition:transform .35s ease;
+    z-index:20;
+  }
+  .install-toast.show{transform:translateY(0);}
+  .install-toast span{flex:1; font-size:.85rem; color:var(--text-dim);}
+  .install-toast button{
+    background:var(--amber); color:#141210; border:none; border-radius:8px;
+    padding:.5rem .9rem; font-weight:600; font-size:.82rem; cursor:pointer;
+  }
+  .install-toast .dismiss{background:none; color:var(--text-faint); padding:.5rem;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="mark"><span class="dot"></span> fotolapissable</div>
+    <h1>Luce <em>dorata</em>,<br>al momento giusto.</h1>
+    <div class="sub">Alba, tramonto, ora dorata e ora blu calcolati per la tua posizione — Etna, costa ionica o ovunque tu stia scattando.</div>
+  </header>
+
+  <div class="wrap">
+    <div class="locbar" id="locbar">
+      <span class="lname" id="locname">Riposto, Sicilia</span>
+      <button id="locbtn">usa la mia posizione</button>
+    </div>
+
+    <div class="datebar">
+      <button class="navbtn" id="prevday" aria-label="Giorno precedente">‹</button>
+      <div class="curdate">
+        <span id="curdate">—</span>
+        <small id="curmeta">—</small>
+      </div>
+      <button class="navbtn" id="nextday" aria-label="Giorno successivo">›</button>
+    </div>
+
+    <div class="timeline">
+      <svg id="timelinesvg" viewBox="0 0 320 64" preserveAspectRatio="none"></svg>
+    </div>
+
+    <div class="phases" id="phases"></div>
+
+    <div class="note" id="note"></div>
+
+    <footer>
+      <span id="coords">—</span>
+      <span>fotolapissable.it</span>
+    </footer>
+  </div>
+</div>
+
+<div class="install-toast" id="installToast">
+  <span>Installa Golden Hour sulla schermata Home per usarlo anche offline sul campo.</span>
+  <button id="installBtn">Installa</button>
+  <button class="dismiss" id="dismissInstall">✕</button>
+</div>
+
+<script>
+/* ---------- Astronomical calculations (NOAA solar position algorithm) ---------- */
+const RAD = Math.PI / 180, DEG = 180 / Math.PI;
+
+function julianDay(date){
+  return date.getTime() / 86400000 - date.getTimezoneOffset()/1440 + 2440587.5;
+}
+
+function solarPositionTimes(date, lat, lon){
+  // Based on NOAA Solar Calculator equations (Meeus low-precision).
+  const n = julianDay(date) - 2451545.0 + 0.0008;
+  const meanLon = (280.460 + 0.9856474 * n) % 360;
+  const meanAnom = (357.528 + 0.9856003 * n) % 360;
+  const eclLon = meanLon + 1.915 * Math.sin(meanAnom*RAD) + 0.020 * Math.sin(2*meanAnom*RAD);
+  const oblEcl = 23.439 - 0.0000004 * n;
+  const decl = Math.asin(Math.sin(oblEcl*RAD) * Math.sin(eclLon*RAD)) * DEG;
+
+  // Equation of time (minutes)
+  const y = Math.tan(oblEcl*RAD/2)**2;
+  const eqTime = 4*DEG*( y*Math.sin(2*meanLon*RAD) - 2*0.0167*Math.sin(meanAnom*RAD)
+                + 4*0.0167*y*Math.sin(meanAnom*RAD)*Math.cos(2*meanLon*RAD)
+                - 0.5*y*y*Math.sin(4*meanLon*RAD) - 1.25*0.0167*0.0167*Math.sin(2*meanAnom*RAD));
+
+  function hourAngle(altitudeDeg){
+    const h0 = altitudeDeg*RAD;
+    const cosH = (Math.sin(h0) - Math.sin(lat*RAD)*Math.sin(decl*RAD)) / (Math.cos(lat*RAD)*Math.cos(decl*RAD));
+    if (cosH > 1) return null;   // sun never reaches this altitude
+    if (cosH < -1) return null;  // sun never goes below this altitude
+    return Math.acos(cosH) * DEG;
+  }
+
+  function timeFor(hourAngleDeg, morning){
+    if (hourAngleDeg === null) return null;
+    const offsetMin = 4*(lon - (morning ? -hourAngleDeg : hourAngleDeg)) - eqTime;
+    // 720 = solar noon in minutes UTC at lon 0; adjust:
+    const minutesUTC = 720 - 4*lon - eqTime + (morning ? -4*hourAngleDeg : 4*hourAngleDeg);
+    const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    return new Date(d.getTime() + minutesUTC*60000);
+  }
+
+  const solarNoonMin = 720 - 4*lon - eqTime;
+  const d0 = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const solarNoon = new Date(d0.getTime() + solarNoonMin*60000);
+
+  const angles = {
+    sunrise: -0.833, sunset: -0.833,
+    civilDawn: -6, civilDusk: -6,
+    goldenStart: 6,      // end of golden hour morning / altitude threshold
+    goldenLow: -4,       // start of golden hour (below horizon slightly / low sun)
+  };
+
+  const haSunrise = hourAngle(angles.sunrise);
+  const haCivil = hourAngle(angles.civilDawn);
+  const haGoldenHigh = hourAngle(6);   // sun at +6°: end of morning golden hour / start of evening golden hour
+  const haBlueEnd = hourAngle(-4);     // sun at -4°: end of blue hour
+
+  return {
+    sunrise: timeFor(haSunrise, true),
+    sunset: timeFor(haSunrise, false),
+    civilDawn: timeFor(haCivil, true),
+    civilDusk: timeFor(haCivil, false),
+    solarNoon,
+    goldenMorningEnd: timeFor(haGoldenHigh, true),
+    goldenEveningStart: timeFor(haGoldenHigh, false),
+    blueMorningStart: timeFor(haBlueEnd, true),
+    blueEveningEnd: timeFor(haBlueEnd, false),
+  };
+}
+
+/* ---------- App state ---------- */
+let state = {
+  lat: 37.7422, lon: 15.2039, // Riposto, Sicilia
+  name: "Riposto, Sicilia",
+  offsetDays: 0
+};
+
+const fmtTime = (d) => d ? d.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '—';
+const fmtDate = (d) => d.toLocaleDateString('it-IT', {weekday:'long', day:'numeric', month:'long'});
+
+function render(){
+  const date = new Date();
+  date.setDate(date.getDate() + state.offsetDays);
+  const times = solarPositionTimes(date, state.lat, state.lon);
+
+  document.getElementById('curdate').textContent = fmtDate(date);
+  document.getElementById('curmeta').textContent = state.offsetDays === 0 ? 'oggi' :
+    state.offsetDays === 1 ? 'domani' : state.offsetDays === -1 ? 'ieri' :
+    (state.offsetDays > 0 ? `+${state.offsetDays} giorni` : `${state.offsetDays} giorni`);
+  document.getElementById('locname').textContent = state.name;
+  document.getElementById('coords').textContent = `${state.lat.toFixed(3)}°N, ${state.lon.toFixed(3)}°E`;
+
+  const phases = [
+    {key:'blueM', label:'Ora blu — mattina', sub:'luce fredda e diffusa prima dell\'alba', time: times.blueMorningStart, cls:'sw-blue'},
+    {key:'dawn', label:'Alba civile', sub:'primo chiarore all\'orizzonte', time: times.civilDawn, cls:'sw-neutral'},
+    {key:'sunrise', label:'Alba', sub:'il sole tocca l\'orizzonte', time: times.sunrise, cls:'sw-sun'},
+    {key:'goldM', label:'Fine ora dorata — mattina', sub:'luce calda e radente termina', time: times.goldenMorningEnd, cls:'sw-gold'},
+    {key:'noon', label:'Mezzogiorno solare', sub:'sole al punto più alto', time: times.solarNoon, cls:'sw-neutral'},
+    {key:'goldE', label:'Inizio ora dorata — sera', sub:'la luce torna calda e radente', time: times.goldenEveningStart, cls:'sw-gold'},
+    {key:'sunset', label:'Tramonto', sub:'il sole scompare all\'orizzonte', time: times.sunset, cls:'sw-sun'},
+    {key:'dusk', label:'Tramonto civile', sub:'ultima luce residua', time: times.civilDusk, cls:'sw-neutral'},
+    {key:'blueE', label:'Ora blu — sera', sub:'luce fredda e diffusa dopo il tramonto', time: times.blueEveningEnd, cls:'sw-blue'},
+  ];
+
+  const container = document.getElementById('phases');
+  container.innerHTML = phases.map(p => `
+    <div class="phase ${p.cls}">
+      <span class="swatch"></span>
+      <span class="label">${p.label}<small>${p.sub}</small></span>
+      <span class="time ${p.time?'':'dim'}">${fmtTime(p.time)}</span>
+    </div>
+  `).join('');
+
+  // Timeline SVG (simple horizon arc)
+  drawTimeline(times);
+
+  // Contextual note
+  const notes = [];
+  if (!times.sunrise) notes.push("A questa data e latitudine il sole non tramonta sotto l'orizzonte in modo standard — controlla i valori con attenzione (es. periodi vicini al solstizio a latitudini estreme).");
+  else {
+    const month = date.getMonth();
+    if (state.lat > 36 && state.lat < 39 && state.lon > 14 && state.lon < 16) {
+      notes.push("Per l'Etna: usa l'ora dorata di sera per luce calda sul versante ionico; l'alba illumina bene il versante nord. In presenza di foschia, l'ora blu accentua i contrasti sul cono vulcanico.");
+    }
+  }
+  document.getElementById('note').innerHTML = notes.length
+    ? notes.join(' ')
+    : "<strong>Ora dorata:</strong> luce calda e morbida, ideale per paesaggio e ritratto. <strong>Ora blu:</strong> cielo saturo di blu profondo, perfetta per skyline, mare e lunghe esposizioni.";
+}
+
+function drawTimeline(times){
+  const svg = document.getElementById('timelinesvg');
+  const w = 320, h = 64;
+  const dayStart = new Date(times.solarNoon); dayStart.setHours(0,0,0,0);
+  const toX = (d) => {
+    if (!d) return null;
+    const mins = (d - dayStart) / 60000;
+    return (mins / 1440) * w;
+  };
+  const blueM = toX(times.blueMorningStart), goldM = toX(times.goldenMorningEnd),
+        goldE = toX(times.goldenEveningStart), blueE = toX(times.blueEveningEnd),
+        sunrise = toX(times.sunrise), sunset = toX(times.sunset);
+
+  let bands = '';
+  if (blueM !== null && goldM !== null){
+    bands += `<rect x="${blueM}" y="20" width="${goldM-blueM}" height="12" fill="url(#gradWarm)" opacity="0.85"/>`;
+  }
+  if (goldE !== null && blueE !== null){
+    bands += `<rect x="${goldE}" y="20" width="${blueE-goldE}" height="12" fill="url(#gradWarm)" opacity="0.85"/>`;
+  }
+  let markers = '';
+  [sunrise, sunset].forEach(x => {
+    if (x !== null) markers += `<circle cx="${x}" cy="26" r="3" fill="#E0A56A"/>`;
+  });
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="gradWarm" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#5B7A9D"/>
+        <stop offset="50%" stop-color="#C8813A"/>
+        <stop offset="100%" stop-color="#5B7A9D"/>
+      </linearGradient>
+    </defs>
+    <line x1="0" y1="26" x2="${w}" y2="26" stroke="#2c2822" stroke-width="2"/>
+    ${bands}
+    ${markers}
+  `;
+}
+
+/* ---------- Interactions ---------- */
+document.getElementById('prevday').onclick = () => { state.offsetDays--; render(); };
+document.getElementById('nextday').onclick = () => { state.offsetDays++; render(); };
+
+document.getElementById('locbtn').onclick = () => {
+  const btn = document.getElementById('locbtn');
+  btn.textContent = 'individuo posizione…';
+  if (!navigator.geolocation){ btn.textContent = 'geolocalizzazione non disponibile'; return; }
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      state.lat = pos.coords.latitude;
+      state.lon = pos.coords.longitude;
+      state.name = 'la tua posizione';
+      btn.textContent = 'aggiorna posizione';
+      render();
+    },
+    () => { btn.textContent = 'posizione non disponibile'; },
+    {timeout:8000}
+  );
+};
+
+render();
+
+/* ---------- PWA install + service worker ---------- */
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installToast').classList.add('show');
+});
+document.getElementById('installBtn').onclick = async () => {
+  document.getElementById('installToast').classList.remove('show');
+  if (deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; }
+};
+document.getElementById('dismissInstall').onclick = () => {
+  document.getElementById('installToast').classList.remove('show');
+};
+
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
